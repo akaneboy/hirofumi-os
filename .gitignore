@@ -1,0 +1,38 @@
+# Ignore binary output and object files
+bin/
+obj/
+*.o
+*.d
+
+# Ignore build directories created by Meson and Ninja
+build/
+.ninja_deps
+.ninja_log
+*.ninja
+meson-logs/
+meson-private/
+meson.build
+
+# Ignore ISO image and related files
+*.iso
+iso_root/
+
+# Ignore Limine cloned files and build artifacts
+limine/
+limine-bios.sys
+limine-bios-cd.bin
+limine-uefi-cd.bin
+BOOTX64.EFI
+BOOTIA32.EFI
+
+# Ignore Makefile artifacts
+*.dSYM
+Makefile
+GNUmakefile
+
+# Ignore editor and IDE config files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
