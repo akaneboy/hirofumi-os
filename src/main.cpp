@@ -19,25 +19,31 @@ static volatile LIMINE_REQUESTS_START_MARKER;
 [[gnu::used, gnu::section(".requests_end_marker")]]
 static volatile LIMINE_REQUESTS_END_MARKER;
 
-static void hcf() {
-    for (;;) {
+static void hcf()
+{
+    for (;;)
+    {
         asm ("hlt");
     }
 }
 
-extern "C" void kmain() {
-    if (LIMINE_BASE_REVISION_SUPPORTED == false) {
+void kmain()
+{
+    if (LIMINE_BASE_REVISION_SUPPORTED == false)
+    {
         hcf();
     }
 
     if (framebuffer_request.response == nullptr
-     || framebuffer_request.response->framebuffer_count < 1) {
+     || framebuffer_request.response->framebuffer_count < 1)
+    {
         hcf();
     }
 
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
 
-    for (size_t i = 0; i < 100; i++) {
+    for (size_t i = 0; i < 100; i++)
+    {
         volatile uint32_t *fb_ptr = static_cast<volatile uint32_t*>(framebuffer->address);
         fb_ptr[i * (framebuffer->pitch / 4) + i] = 0xffffff;
     }
