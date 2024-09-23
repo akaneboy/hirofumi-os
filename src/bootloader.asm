@@ -1,4 +1,4 @@
-; Real bootloader in x86 Assembly
+; Real bootloader in x86 Assembly with screen clearing
 [BITS 16]
 [ORG 0x7C00]
 
@@ -9,6 +9,9 @@ start:
     mov es, ax
     mov ss, ax
     mov sp, 0x7C00
+
+    ; Clear the screen
+    call clear_screen
 
     ; Print welcome message
     mov si, welcome_msg
@@ -34,6 +37,25 @@ disk_error:
     call print_string
     jmp $
 
+clear_screen:
+    mov ah, 0x00    ; Set video mode
+    mov al, 0x03    ; 80x25 text mode
+    int 0x10
+
+    mov ah, 0x06    ; Scroll up function
+    xor al, al      ; Clear entire screen
+    xor cx, cx      ; Upper left corner CH=row, CL=column
+    mov dx, 0x184F  ; lower right corner DH=row, DL=column
+    mov bh, 0x07    ; WhiteOnBlack
+    int 0x10
+
+    mov ah, 0x02    ; Set cursor position
+    xor bh, bh      ; Page 0
+    xor dx, dx      ; DH=row, DL=column
+    int 0x10
+
+    ret
+
 print_string:
     lodsb
     or al, al
@@ -51,6 +73,7 @@ times 510-($-$$) db 0
 dw 0xAA55
 
 second_stage:
+    call clear_screen
     mov si, second_msg
     call print_string
     jmp $
